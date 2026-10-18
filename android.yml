@@ -1,0 +1,49 @@
+name: Build ZENITH Android
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Proje yapisini kur
+        run: |
+          mkdir -p app/src/main/java/com/zenith/mobile app/src/main/assets
+          cp MainActivity.kt app/src/main/java/com/zenith/mobile/MainActivity.kt
+          cp index.html app/src/main/assets/index.html
+          cp AndroidManifest.xml app/src/main/AndroidManifest.xml
+          cp app-build.gradle app/build.gradle
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.5
+
+      - name: APK derle
+        run: gradle assembleDebug --no-daemon
+
+      - name: APK hazirla
+        run: cp app/build/outputs/apk/debug/app-debug.apk ZenithMobile.apk
+
+      - name: Release yayinla
+        uses: ncipollo/release-action@v1
+        with:
+          tag: latest
+          name: ZENITH Android
+          artifacts: ZenithMobile.apk
+          allowUpdates: true
+          replacesArtifacts: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}

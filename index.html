@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ZENITH</title>
+<style>
+:root{--a1:#a855f7;--a2:#6366f1;--bg:#07070d;--panel:rgba(24,24,40,.78);--line:rgba(255,255,255,.08);--text:#ececf6;--dim:#8d8da8;--pink:#ff2d95}
+body[data-accent=blue]{--a1:#38bdf8;--a2:#6366f1}
+body[data-accent=green]{--a1:#22ff99;--a2:#00d4ff}
+body[data-accent=pink]{--a1:#ff2d95;--a2:#a855f7}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,Roboto,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;background:radial-gradient(500px 360px at 10% 0%,color-mix(in srgb,var(--a1) 24%,transparent),transparent),radial-gradient(420px 360px at 100% 100%,color-mix(in srgb,var(--a2) 22%,transparent),transparent);animation:mv 12s ease-in-out infinite alternate;z-index:0}
+@keyframes mv{to{filter:hue-rotate(25deg)}}
+#splash{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+#splash.hide{opacity:0;visibility:hidden}
+.sg{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--a1) 45%,transparent),transparent 65%);animation:pl 2.2s ease-in-out infinite}
+@keyframes pl{50%{transform:scale(1.2);opacity:.6}}
+.sl{position:relative;display:flex;font-size:46px;font-weight:900;letter-spacing:8px}
+.sl span{background:linear-gradient(180deg,#fff,var(--a1));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px var(--a1));opacity:0;transform:translateY(20px);animation:lt .6s forwards}
+.sl span:nth-child(1){animation-delay:.1s}.sl span:nth-child(2){animation-delay:.22s}.sl span:nth-child(3){animation-delay:.34s}.sl span:nth-child(4){animation-delay:.46s}.sl span:nth-child(5){animation-delay:.58s}.sl span:nth-child(6){animation-delay:.7s}
+@keyframes lt{to{opacity:1;transform:none}}
+.ss{position:relative;margin-top:6px;font-size:10px;letter-spacing:4px;color:var(--dim)}
+.sb{position:relative;margin-top:28px;width:220px;height:4px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+#sbar{height:100%;width:0;background:linear-gradient(90deg,var(--a2),var(--a1));box-shadow:0 0 12px var(--a1);transition:width .12s}
+
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+header{padding:14px 18px 8px;display:flex;align-items:center;gap:10px}
+.brand{font-weight:900;letter-spacing:5px;font-size:20px;background:linear-gradient(90deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 8px var(--a1))}
+.tag{font-size:9px;letter-spacing:2px;color:var(--dim);border:1px solid var(--line);padding:2px 8px;border-radius:20px}
+main{flex:1;overflow-y:auto;padding:6px 16px 20px}
+.page{display:none;animation:fd .3s}.page.active{display:block}
+@keyframes fd{from{opacity:0;transform:translateY(8px)}}
+h2{margin:6px 0 4px;font-size:20px}
+.sub{margin:0 0 14px;color:var(--dim);font-size:12px;line-height:1.5}
+h3{margin:0 0 10px;font-size:11px;letter-spacing:2px;color:var(--a1);text-transform:uppercase}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.stat .l{font-size:9px;letter-spacing:2px;color:var(--dim)}
+.stat .v{font-size:19px;font-weight:800;margin:2px 0 6px}
+.m{height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.m div{height:100%;width:0;background:linear-gradient(90deg,var(--a2),var(--a1));box-shadow:0 0 8px var(--a1);transition:width .6s}
+.bar{display:flex;gap:8px;margin-bottom:12px}
+input.t{flex:1;background:rgba(10,10,18,.7);border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:10px;font-size:14px;outline:none}
+input.t:focus{border-color:var(--a1)}
+.chip{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:12px;color:var(--dim)}
+.chip.on{color:#fff;border-color:var(--a1);box-shadow:0 0 10px color-mix(in srgb,var(--a1) 40%,transparent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);padding:12px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;animation:fd .35s}
+.card img{position:absolute;left:12px;top:12px;width:44px;height:44px;border-radius:11px}
+.card .big{position:absolute;right:-4px;top:-14px;font-size:90px;font-weight:900;color:rgba(255,255,255,.07)}
+.card h4{margin:0 0 8px;font-size:13px;position:relative;text-shadow:0 2px 8px #000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go{position:relative;border:0;border-radius:9px;padding:9px;font-weight:700;font-size:12px;color:#fff;background:linear-gradient(90deg,var(--a2),var(--a1));box-shadow:0 0 12px color-mix(in srgb,var(--a1) 45%,transparent)}
+.go:active{filter:brightness(1.3)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row small{display:block;color:var(--dim);font-size:11px;margin-top:2px}
+.sw{position:relative;width:46px;height:26px;flex:none}
+.sw input{display:none}
+.sw b{position:absolute;inset:0;border-radius:26px;background:#2a2a40;transition:.25s}
+.sw b::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.25s}
+.sw input:checked+b{background:linear-gradient(90deg,var(--a2),var(--a1));box-shadow:0 0 12px var(--a1)}
+.sw input:checked+b::after{transform:translateX(20px)}
+.btn{width:100%;border:1px solid var(--line);background:rgba(34,34,54,.9);color:var(--text);border-radius:11px;padding:13px;font-size:14px;margin-top:8px;text-align:left}
+.btn.acc{background:linear-gradient(90deg,var(--a2),var(--a1));border:0;color:#fff;font-weight:700;text-align:center;box-shadow:0 0 16px color-mix(in srgb,var(--a1) 40%,transparent)}
+.btn small{display:block;color:var(--dim);font-size:11px;margin-top:2px}
+.btn.acc small{color:rgba(255,255,255,.8)}
+.log{font-family:monospace;font-size:12px;line-height:1.7;color:#b8b8d0;max-height:140px;overflow-y:auto}
+.log div::before{content:"› ";color:var(--a1)}
+.tip{display:flex;gap:10px;padding:9px 0;font-size:13px;line-height:1.5;border-bottom:1px solid var(--line)}
+.tip:last-child{border:0}
+.accents{display:flex;gap:14px}
+.ac{width:42px;height:42px;border-radius:50%;border:2px solid transparent}
+.a1{background:linear-gradient(135deg,#a855f7,#6366f1)}.a2{background:linear-gradient(135deg,#38bdf8,#6366f1)}.a3{background:linear-gradient(135deg,#22ff99,#00d4ff)}.a4{background:linear-gradient(135deg,#ff2d95,#a855f7)}
+nav{display:flex;background:rgba(10,10,18,.92);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;border:0;background:transparent;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;padding:6px 0;border-radius:10px}
+nav button i{font-style:normal;font-size:20px}
+nav button.active{color:#fff}
+nav button.active i{filter:drop-shadow(0 0 8px var(--a1))}
+nav button.active span{color:var(--a1)}
+#toast{position:fixed;left:16px;right:16px;bottom:84px;z-index:40;padding:12px 14px;border-radius:12px;background:rgba(20,20,34,.96);border:1px solid var(--a1);box-shadow:0 0 18px color-mix(in srgb,var(--a1) 35%,transparent);font-size:13px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none}
+#toast.show{opacity:1;transform:none}
+</style>
+</head>
+<body data-accent="purple">
+
+<div id="splash">
+  <div class="sg"></div>
+  <div class="sl"><span>Z</span><span>E</span><span>N</span><span>I</span><span>T</span><span>H</span></div>
+  <div class="ss">MOBILE FPS BOOSTER</div>
+  <div class="sb"><div id="sbar"></div></div>
+</div>
+
+<div class="bg"></div>
+<div id="app">
+  <header><div class="brand">ZENITH</div><div class="tag">MOBILE</div></header>
+  <main>
+    <section class="page active" id="p-games">
+      <div class="stats">
+        <div class="stat"><div class="l">RAM</div><div class="v" id="ramV">--</div><div class="m"><div id="ramB"></div></div></div>
+        <div class="stat"><div class="l">SICAKLIK</div><div class="v" id="tempV">--</div><div class="m"><div id="tempB"></div></div></div>
+        <div class="stat"><div class="l">PİL</div><div class="v" id="batV">--</div><div class="m"><div id="batB"></div></div></div>
+      </div>
+      <div class="bar">
+        <input class="t" id="search" placeholder="Oyun ara...">
+        <button class="chip" id="allChip">Tümü</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section class="page" id="p-boost">
+      <h2>Game Booster</h2>
+      <p class="sub">Bir oyunu "Boost + Başlat" ile açtığında burada seçtiklerin uygulanır.</p>
+      <div class="panel">
+        <h3>Seçenekler</h3>
+        <div class="row"><div>Arka plan uygulamalarını temizle<small>Yüklediğin uygulamaların arka plan işlemlerini sonlandırır</small></div><label class="sw"><input type="checkbox" id="kill"><b></b></label></div>
+        <div class="row"><div>Rahatsız Etme (bildirim sustur)<small>Oyun sırasında bildirimler gelmez, dönünce eski haline döner</small></div><label class="sw"><input type="checkbox" id="dnd"><b></b></label></div>
+        <button class="btn" id="dndPerm">🔔 Rahatsız Etme izni ver<small id="dndState">İzin gerekli, dokun</small></button>
+      </div>
+      <button class="btn acc" id="boostNow">⚡ Şimdi Boost (oyun açmadan)<small>RAM'i boşalt, bildirimleri sustur</small></button>
+      <div class="panel" style="margin-top:12px"><h3>Günlük</h3><div class="log" id="log"></div></div>
+    </section>
+
+    <section class="page" id="p-tools">
+      <h2>Hızlı Ayarlar</h2>
+      <p class="sub">Android'in kendi performans ayarlarına tek dokunuşla git.</p>
+      <button class="btn" data-open="display">📺 Ekran yenileme hızı<small>90/120 Hz seçeneği varsa en yükseğe al</small></button>
+      <button class="btn" data-open="battery">🔋 Pil tasarrufu<small>Oyun oynarken KAPALI olsun, FPS düşürür</small></button>
+      <button class="btn" data-open="batteryopt">🔌 Pil optimizasyonu<small>Oyunu "kısıtlama yok" yap</small></button>
+      <button class="btn" data-open="dev">🧑‍💻 Geliştirici seçenekleri<small>Animasyon ölçeklerini kapat/0.5x yap</small></button>
+      <div class="panel" style="margin-top:14px">
+        <h3>Gerçekçi İpuçları</h3>
+        <div class="tip"><span>🌡</span><span>Telefon ısınınca FPS düşer. Kılıfı çıkar, şarj ederken oynama.</span></div>
+        <div class="tip"><span>🎮</span><span>Oyunun kendi grafik ayarını düşür. En büyük FPS farkı buradan gelir.</span></div>
+        <div class="tip"><span>📱</span><span>Kökleme (root) olmadan ZENITH FPS'i sihirle artıramaz. RAM boşaltır, bildirimleri susturur ve ayarlara kısayol verir. Fark telefonuna göre değişir.</span></div>
+      </div>
+    </section>
+
+    <section class="page" id="p-settings">
+      <h2>Ayarlar</h2>
+      <div class="panel"><h3>Tema Rengi</h3>
+        <div class="accents">
+          <button class="ac a1" data-ac="purple"></button><button class="ac a2" data-ac="blue"></button>
+          <button class="ac a3" data-ac="green"></button><button class="ac a4" data-ac="pink"></button>
+        </div>
+      </div>
+      <div class="panel"><h3>Hakkında</h3><p class="sub" style="margin:0">ZENITH Mobile. Başka uygulamaların içine müdahale etmez. Sadece arka planı temizler, bildirimleri susturur ve Android ayarlarına kısayol verir.</p></div>
+    </section>
+  </main>
+
+  <nav>
+    <button class="active" data-p="games"><i>🎮</i><span>Oyunlar</span></button>
+    <button data-p="boost"><i>⚡</i><span>Booster</span></button>
+    <button data-p="tools"><i>🛠</i><span>Ayarlar</span></button>
+    <button data-p="settings"><i>🎨</i><span>Tema</span></button>
+  </nav>
+</div>
+<div id="toast"></div>
+
+<script>
+if (!window.Android) { // tarayıcıda önizleme için sahte köprü
+  window.Android = {
+    getGames: () => JSON.stringify([{pkg:'a',name:'Örnek Oyun',game:true},{pkg:'b',name:'Başka Oyun',game:true},{pkg:'c',name:'Notlar',game:false}]),
+    getIcon: () => '', getStats: () => JSON.stringify({total:8e9,avail:3e9,temp:34.5,battery:80,dndGranted:false}),
+    boostLaunch: () => JSON.stringify({cleaned:12,freedMB:340,dnd:'needs',launched:false}), openSettings: () => {}
+  };
+}
+const A = window.Android;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const st = {
+  get: (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 3200); }
+function log(m) { const l = $('#log'), d = document.createElement('div'); d.textContent = m; l.appendChild(d); l.scrollTop = l.scrollHeight; }
+
+// splash
+let p = 0;
+const iv = setInterval(() => { p = Math.min(100, p + Math.random() * 10 + 4); $('#sbar').style.width = p + '%'; if (p >= 100) { clearInterval(iv); setTimeout(() => $('#splash').classList.add('hide'), 300); } }, 110);
+
+// sekmeler
+$$('nav button').forEach(b => b.onclick = () => {
+  $$('nav button').forEach(x => x.classList.toggle('active', x === b));
+  $$('.page').forEach(pg => pg.classList.toggle('active', pg.id === 'p-' + b.dataset.p));
+});
+
+// tema
+function accent(a) { document.body.dataset.accent = a; st.set('accent', a); }
+accent(st.get('accent', 'purple'));
+$$('[data-ac]').forEach(b => b.onclick = () => accent(b.dataset.ac));
+
+// ayarlar
+['kill', 'dnd'].forEach(id => { const el = $('#' + id); el.checked = st.get(id, true); el.onchange = () => st.set(id, el.checked); });
+$$('[data-open]').forEach(b => b.onclick = () => A.openSettings(b.dataset.open));
+$('#dndPerm').onclick = () => A.openSettings('dnd');
+
+// istatistik
+function stats() {
+  try {
+    const s = JSON.parse(A.getStats());
+    const used = Math.round((1 - s.avail / s.total) * 100);
+    $('#ramV').textContent = used + '%'; $('#ramB').style.width = used + '%';
+    $('#tempV').textContent = s.temp.toFixed(0) + '°'; $('#tempB').style.width = Math.min(100, Math.max(0, (s.temp - 20) * 3)) + '%';
+    $('#batV').textContent = s.battery + '%'; $('#batB').style.width = s.battery + '%';
+    $('#dndState').textContent = s.dndGranted ? '✔ İzin verildi' : 'İzin gerekli, dokun';
+  } catch (e) {}
+}
+stats(); setInterval(stats, 3000);
+
+// oyunlar
+let apps = [], showAll = st.get('showAll', false); const icons = {};
+const hue = s => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+
+function render() {
+  const q = $('#search').value.trim().toLowerCase();
+  let list = apps.filter(a => (showAll || a.game) && a.name.toLowerCase().includes(q));
+  const grid = $('#grid'); grid.innerHTML = '';
+  $('#allChip').classList.toggle('on', showAll);
+  $('#allChip').textContent = showAll ? 'Tümü' : 'Oyunlar';
+  if (!list.length) { grid.innerHTML = '<p class="sub" style="grid-column:1/-1;text-align:center;padding:40px 0">Oyun bulunamadı. Sağdaki düğmeyle tüm uygulamaları göster.</p>'; return; }
+  list.forEach(a => {
+    const h = hue(a.name), c = document.createElement('div');
+    c.className = 'card';
+    c.style.background = `linear-gradient(135deg,hsl(${h},60%,26%),hsl(${(h + 50) % 360},65%,9%))`;
+    c.innerHTML = `<div class="big">${esc(a.name[0] || '?').toUpperCase()}</div><img alt="" ${icons[a.pkg] ? `src="${icons[a.pkg]}"` : 'style="display:none"'}><h4>${esc(a.name)}</h4><button class="go">⚡ Boost + Başlat</button>`;
+    $('.go', c).onclick = () => boost(a.pkg, a.name);
+    c.dataset.pkg = a.pkg;
+    grid.appendChild(c);
+  });
+  loadIcons();
+}
+
+function loadIcons() {
+  const cards = $$('.card').filter(c => !icons[c.dataset.pkg]);
+  let i = 0;
+  (function next() {
+    if (i >= cards.length) return;
+    const c = cards[i++];
+    try {
+      const d = A.getIcon(c.dataset.pkg);
+      if (d) { icons[c.dataset.pkg] = d; const im = $('img', c); im.src = d; im.style.display = 'block'; }
+    } catch (e) {}
+    setTimeout(next, 0);
+  })();
+}
+
+$('#search').oninput = render;
+$('#allChip').onclick = () => { showAll = !showAll; st.set('showAll', showAll); render(); };
+
+function boost(pkg, name) {
+  const kill = $('#kill').checked, dnd = $('#dnd').checked;
+  toast(name ? 'Boost çalışıyor, ' + name + ' açılıyor...' : 'Boost çalışıyor...');
+  setTimeout(() => {
+    try {
+      const r = JSON.parse(A.boostLaunch(pkg || '', kill, dnd));
+      log((name ? name + ': ' : '') + r.cleaned + ' uygulama temizlendi, RAM +' + r.freedMB + ' MB');
+      if (r.dnd === 'on') log('Rahatsız Etme açıldı');
+      if (r.dnd === 'needs') { log('Rahatsız Etme için izin gerekli'); toast('Rahatsız Etme izni yok: Booster sekmesinden izin ver'); }
+      else toast('Boost tamam: RAM +' + r.freedMB + ' MB');
+    } catch (e) { toast('Hata: ' + e.message); }
+    stats();
+  }, 80);
+}
+$('#boostNow').onclick = () => boost('', '');
+
+try { apps = JSON.parse(A.getGames()).sort((a, b) => a.name.localeCompare(b.name)); } catch (e) { apps = []; }
+if (!apps.some(a => a.game)) { showAll = true; }
+render();
+</script>
+</body>
+</html>
